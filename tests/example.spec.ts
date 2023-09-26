@@ -41,7 +41,7 @@ test.describe("Recruitment task", () => {
     const addProductButton = page.getByRole("button", { name: "Add to Cart" });
     const notificationMessage = page.getByRole("alert");
     const shoppingCartLink = page.getByRole("link", { name: "shopping cart" });
-    // const productDetailsTable = page.locator("#shopping-cart-table");
+    const productDetailsTable = page.locator("#shopping-cart-table");
     const removeButtonItem = page.getByTitle("Remove item");
     // When
     await searchProductField.fill(productName);
@@ -55,7 +55,19 @@ test.describe("Recruitment task", () => {
     // When
     await shoppingCartLink.click();
     // Then
-    // TODO: map and check product table values
+    await expect(productDetailsTable.locator("tr")).toHaveCount(3);
+    await expect(productDetailsTable.locator(".product-item-name")).toHaveText(
+      productName
+    );
+    await expect(
+      productDetailsTable.locator("[data-th='Price'] .price")
+    ).toHaveText("$43.00");
+    await expect(productDetailsTable.locator(".input-text.qty")).toHaveValue(
+      "1"
+    );
+    await expect(
+      productDetailsTable.locator("[data-th='Subtotal'] .price")
+    ).toHaveText("$43.00");
     // When
     await removeButtonItem.click();
     // Then
